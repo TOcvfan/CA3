@@ -11,29 +11,36 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-    $("#btn").click(function () {
-        var userName = $("#userName").val();
-        var pw = $("#pw").val();
+            //alert("sdjfsijf");
+            $("#btn").click(function () {
+                
+                var userName = $("#userName").val();
+                var pw = $("#pw").val();
+                //var person = ""+{userName: $("#userName").val(), pw: $("#pw")};
+                //alert(person);
 
-        $.ajax({
-            url: "api/createUser/",
-            type: "POST",
-            data: JSON.stringify({userName: $("#userName").val(), pw: $("#pw")})
+                $.ajax({
+                    url: "api/createUser",
+                    type: "POST",
+                    data: JSON.stringify({userName: $("#userName").val(), pw: $("#pw").val()}),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json"
 
-        }).done(function (dataToServer) {
-            $("#userName").val(dataToServer.createUser) + $("#pw").val(dataToServer.createuser);
-        }).fail(function () {
-            alert("ERHMEGERD Y I KENT CREAT NEW QUOET!?");
-        })
+                }).done(function (dataToServer) {
+                    $("#userName").val(dataToServer.createUser) + $("#pw").val(dataToServer.createuser);
+                    
+                }).fail(function () {
+                    alert("ERHMEGERD Y I KENT CREAT NEW QUOET!?");
+                })
 
-    });
-});
-        
-        
-        
+            });
+        });
+
+
+
         var password1 = document.getElementById('pw');
         var password2 = document.getElementById('pw2');
-
+        
         var checkPasswordValidity = function () {
             if (password1.value != password2.value) {
                 password1.setCustomValidity('Passwords must match.');
@@ -44,7 +51,7 @@
 
         password1.addEventListener('change', checkPasswordValidity, false);
         password2.addEventListener('change', checkPasswordValidity, false);
-        
+
     </script>
     <button id="btn">Submit</button>
 

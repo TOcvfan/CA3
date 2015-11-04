@@ -1,5 +1,6 @@
 package facades;
 
+import deploy.DeploymentConfiguration;
 import entity.User;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +14,7 @@ public class UserFacade {
     
     
     
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("AngSeedServerPU");
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory(DeploymentConfiguration.puName);
     EntityManager em;
     
     
