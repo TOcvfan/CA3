@@ -1,10 +1,28 @@
 <h3>This is the partial for All Users.</h3>
 <p>Shown only for admins</p>
 <div>
-  <p>Data from server (Admins ONLY) <b style="color: darkblue">{{data}}</b></p>
-  <div ng-show="view5.role">
-      <p>IT'S WORKING</p>
-      
-  </div>
-     
+    <script>
+        $("#deletebtn").click(function(){
+                    $.ajax({
+                        url: "api/admin/user/"+ $("#user").val(),
+                        type: "DELETE"
+                        
+                        
+                    }).done(function(dataToServer){
+                        $("#userName").val(dataToServer.deleteUser);
+                    }).fail(function(){
+                        $("#userName").val("sorry no quote to delete at this id");
+                        
+                    });
+                    
+                });
+    </script>
+    <div ng-show="view5.role">
+        <p>IT'S WORKING</p>
+        <div>
+        <input id="user" type="text" placeholder="Enter Id" />
+        <input id="userName" style="width: 60em;margin-top: 1em"/></div>
+        <button id="deletebtn">delete User</button>
+    </div>
+
 </div>
