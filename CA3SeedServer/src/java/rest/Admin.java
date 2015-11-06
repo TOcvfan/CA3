@@ -51,7 +51,6 @@ public class Admin {
         
         uf.deleteUser(userName);
         
-        
         return gson.toJson(response);
     }
     @GET
@@ -69,9 +68,7 @@ public class Admin {
             JsonObject main = new JsonObject();
 
             try {
-                
                 user = userList.get(i);
-
                 main.addProperty("userName", user.getUserName());
                 main.addProperty("password", user.getPassword());
                 

@@ -4,13 +4,33 @@ import entity.User;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 public class UserFacade {
 
     private EntityManagerFactory emf;
-
+    
     public UserFacade(EntityManagerFactory e) {
         emf = e;
+//        Persistence.generateSchema("CA3SeedServerPU", null);
+        
+//        User u = new User("user", "test");
+//        u.AddRole("User");
+//        System.out.println(u);
+//        User admin = new User("admin", "test");
+//        admin.AddRole("Admin");
+//        System.out.println(admin);
+//        User both = new User("user_admin", "test");
+//        both.AddRole("User");
+//        both.AddRole("Admin");
+//        System.out.println(both);
+//        EntityManager em = emf.createEntityManager();
+//        em.getTransaction().begin();
+//        em.persist(u);
+//        em.persist(admin);
+//        em.persist(both);
+//        em.getTransaction().commit();
+//        em.close();
     }
 
     public EntityManager getEntityManager() {
@@ -19,7 +39,7 @@ public class UserFacade {
 
     public User getUserByUserId(String userName) {
         EntityManager em = getEntityManager();
-        em = emf.createEntityManager();
+        //em = emf.createEntityManager();
         User user = em.find(User.class, userName);
         em.close();
 
@@ -73,5 +93,4 @@ public class UserFacade {
             em.close();
         }
     }
-
 }

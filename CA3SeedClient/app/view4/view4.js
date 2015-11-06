@@ -1,5 +1,6 @@
 'use strict';
 
+
 angular.module('myApp.view4', ['ngRoute'])
 
         .config(['$routeProvider', function ($routeProvider) {

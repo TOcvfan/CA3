@@ -1,5 +1,39 @@
 <h3>This is the partial for All Users.</h3>
+
 <p>Shown only for admins</p>
+
+<!--<p>{{ctrl.HAHA}}</p>-->
+
+
+
+
+<p>table users</p>
+<table>
+            <thead>
+                <tr>
+                    <td>
+                        password
+                    </td>
+                    <td>
+                        name
+                    </td>
+                  
+                </tr>
+            </thead>
+            
+            <tbody>
+                <tr ng-repeat="user in ctrl.allUsers">
+                     <td>
+                        {{user.password}}
+                    </td>
+                   
+                    <td>
+                        {{user.userName}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
 <div>
     <script>
         $("#deletebtn").click(function(){
@@ -14,7 +48,6 @@
                         $("#userName").val("sorry no quote to delete at this id");
                         
                     });
-                    
                 });
     </script>
     <div ng-show="view5.role">
@@ -24,5 +57,5 @@
         <input id="userName" style="width: 60em;margin-top: 1em"/></div>
         <button id="deletebtn">delete User</button>
     </div>
-
 </div>
+<p>this is all user {{ctrl.allUsers[3]}}</p>
