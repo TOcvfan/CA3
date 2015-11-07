@@ -9,43 +9,55 @@ app.config(['$routeProvider', function ($routeProvider) {
       controller: 'View3Ctrl',
       controllerAs:'ctrl'
     });
-  }]);
-
-app.controller('View3Ctrl',['HttpService', function (HttpService) {
+  }]).
+      
+controller('View3Ctrl',['HttpService2', function (HttpService2) {
   
-  this.allInfo = HttpService.getInfo();
-        this.jens = "the jens";
-//    $http({
-//    method: 'GET',
-//    url: 'api/demouser'
-//  }).then(function successCallback(res) {
-//    $scope.data = res.data.message;
-//  }, function errorCallback(res) {
-//    $scope.error = res.status + ": "+ res.data.statusText;
-//  });
-
+  this.allInfo = HttpService2.getInfo();
 }]);
 
-app.service('HttpService',['$http', function($http){
+app.service('HttpService2',['$http', function($http){
     
-    
+        
         this.getInfo = function(){
-            var info=[];
-            
+           var info=[]; 
             $http({
                 method:'GET',
-                url:'api/demoadmin/all'//'http://cvrapi.dk/api?vat=3167%208021&country=dk'        //'//cvrapi.dk/api?search="   vat   "&country=dk'
-            }).then(function succesCallBack(response){
-                for (var i = 0; i < response.data.length; i++) {
+                url:'api/demouser/all'   
+            })
+                    .then(function succesCallBack(response){
+                        
+                        console.log("this was httpservice2"+response.data);
+//                    .then(function succesCallBack(response){
+//                for (var i = 0; i < response.data.length; i++) {
+//                    info.push(response.data[i]);
+//                }return info;
+
+//                    var x  = $.parseJSON( response.data.toString());
                     
-                    info.push(response.data[i]);
-                    console.log("from console: "+response.data[i]);
-                }return info;
+                    
+
+//
+                for (var prop in response.data) {
+//                    console.log("this was prop"+response.data[prop]);
+                   
+                    
+                    info.push(response.data[prop]);
+                    Object.keys(response.data[prop]);
+                    
+                    var str=response.data[prop]+":"+Object.keys(response.data[prop]).toString();
+                }
+
+                console.log("this was info: "+info.toString());
+                    
+//                info === response.data;
+                return info;    
+                
             },function errorCallBack(response){
                 console.log("there was an error : "+response.status);
             });
+            console.log("this was before return: "+info.toString());
             return info;
         };
-        
         
 }]);

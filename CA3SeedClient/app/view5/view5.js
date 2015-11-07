@@ -37,6 +37,7 @@ app.service('HttpService',['$http', function($http){
                 method:'GET',
                 url:'api/demoadmin/all'
             }).then(function succesCallBack(response){
+                console.log("this is response.data from log"+response.data.toString());
                 for (var i = 0; i < response.data.length; i++) {
                     users.push(response.data[i]);
                     console.log("from console: "+response.data[i]);
