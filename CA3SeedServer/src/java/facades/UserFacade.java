@@ -1,6 +1,7 @@
 package facades;
 
 import entity.User;
+import exception.UserNotFoundException;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -37,13 +38,19 @@ public class UserFacade {
         return emf.createEntityManager();
     }
 
-    public User getUserByUserId(String userName) {
+    public User getUserByUserId(String userName) throws UserNotFoundException {
         EntityManager em = getEntityManager();
-        //em = emf.createEntityManager();
+        try{
         User user = em.find(User.class, userName);
-        em.close();
-
+        if(user == null){
+            throw new UserNotFoundException("No User found with this username");
+        }
         return user;
+        } finally {
+            em.close();
+        }
+
+        
     }
 
     public void createUser(String userName, String pw) {
@@ -51,20 +58,23 @@ public class UserFacade {
         User user = new User(userName, pw);
         user.AddRole("User");
 
-        em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.persist(user);
-        em.getTransaction().commit();
-        em.close();
-
+        try {
+            em = emf.createEntityManager();
+            em.getTransaction().begin();
+            em.persist(user);
+            em.getTransaction().commit();
+            
+        } finally {
+            em.close();
+        }
     }
 
-    public User deleteUser(String userName) {
+    public User deleteUser(String userName) throws UserNotFoundException {
         EntityManager em = getEntityManager();
         try {
             User u = em.find(User.class, userName);
             if (u == null) {
-                //throw new PersonNotFoundException("No Person found with provided id");
+                throw new UserNotFoundException("No User found with this username");
             }
             em.getTransaction().begin();
             em.remove(u);
@@ -78,8 +88,8 @@ public class UserFacade {
     /*
      Return the Roles if users could be authenticated, otherwise null
      */
-    public List<String> authenticateUser(String userName, String password) {
-
+    public List<String> authenticateUser(String userName, String password) throws UserNotFoundException {
+        
         User user = getUserByUserId(userName);
 
         return user != null && user.getPassword().equals(password) ? user.getRoles() : null;

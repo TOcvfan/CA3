@@ -7,6 +7,7 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.SignedJWT;
 import deploy.DeploymentConfiguration;
 import entity.User;
+import exception.UserNotFoundException;
 import facades.UserFacade;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -15,6 +16,8 @@ import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Priority;
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
@@ -85,11 +88,13 @@ public class JWTAuthenticationFilter implements ContainerRequestFilter {
 
       } catch (ParseException | JOSEException e) {
         throw new NotAuthorizedException("You are not authorized to perform this action",Response.Status.FORBIDDEN);        
-      }
+      } catch (UserNotFoundException ex) {
+            Logger.getLogger(JWTAuthenticationFilter.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
   }
   
-  private UserPrincipal getPricipalByUserId(String userId) {
+  private UserPrincipal getPricipalByUserId(String userId) throws UserNotFoundException {
     UserFacade facade = new UserFacade(Persistence.createEntityManagerFactory(DeploymentConfiguration.puName));
     User user = facade.getUserByUserId(userId);
     if (user != null) {

@@ -11,6 +11,7 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import deploy.DeploymentConfiguration;
+import exception.UserNotFoundException;
 import facades.UserFacade;
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,7 +41,7 @@ public class Login {
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response login(String jsonString) throws JOSEException {
+  public Response login(String jsonString) throws JOSEException, UserNotFoundException {
     JsonObject json = new JsonParser().parse(jsonString).getAsJsonObject();
     String username =  json.get("username").getAsString(); 
     String password =  json.get("password").getAsString();
@@ -56,7 +57,7 @@ public class Login {
     throw new NotAuthorizedException("Ilegal username or password",Response.Status.UNAUTHORIZED);
   }
   
-  private List<String>  authenticate(String userName, String password){
+  private List<String>  authenticate(String userName, String password) throws UserNotFoundException{
     UserFacade facade = new UserFacade(Persistence.createEntityManagerFactory(DeploymentConfiguration.puName));
     return facade.authenticateUser(userName, password);
   }

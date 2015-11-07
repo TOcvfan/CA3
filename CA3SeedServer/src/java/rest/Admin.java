@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import deploy.DeploymentConfiguration;
 import entity.User;
+import exception.UserNotFoundException;
 import facades.UserFacade;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -42,7 +43,7 @@ public class Admin {
     @DELETE
     @Path("user/{userName}")
     @Produces("application/json")
-    public String deleteUser(@PathParam("userName") String content) {
+    public String deleteUser(@PathParam("userName") String content) throws UserNotFoundException {
         JsonObject json = parser.parse(content).getAsJsonObject();
         String userName = json.get("userName").getAsString();
         

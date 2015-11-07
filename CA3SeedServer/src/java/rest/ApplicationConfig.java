@@ -21,12 +21,15 @@ public class ApplicationConfig extends Application {
    * If required, comment out calling this method in getClasses().
    */
   private void addRestResourceClasses(Set<Class<?>> resources) {
+    resources.add(exception.AllExceptionMapper.class);
+    resources.add(exception.NotFoundExceptionMapper.class);
+    resources.add(exception.UserNotFoundExceptionMapper.class);
     resources.add(rest.Admin.class);
     resources.add(rest.CreateUser.class);
     resources.add(rest.UserResource.class);
-    resources.add(security.JWTAuthenticationFilter.class);
-    resources.add(security.Login.class);
-    resources.add(security.NotAuthorizedExceptionMapper.class);
+        resources.add(security.JWTAuthenticationFilter.class);
+        resources.add(security.Login.class);
+        resources.add(security.NotAuthorizedExceptionMapper.class);
         resources.add(security.RolesAllowedFilter.class);
   }
   
