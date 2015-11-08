@@ -7,9 +7,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import deploy.DeploymentConfiguration;
+import entity.CVR;
 import facades.CvrFacade;
 import facades.UserFacade;
 import java.net.HttpURLConnection;
+import java.util.List;
 import java.util.regex.Pattern;
 import javax.annotation.security.RolesAllowed;
 import javax.persistence.Persistence;
@@ -27,6 +29,10 @@ public class UserResource {
     JsonParser parser = new JsonParser();
     UserFacade uf = new UserFacade(Persistence.createEntityManagerFactory(DeploymentConfiguration.puName));
     private static JsonArray list = new JsonArray();
+    private static List<CVR> cvrList;
+    CvrFacade call = new CvrFacade();
+    CVR cvr = new CVR();
+    
     
     
     @GET
@@ -39,32 +45,32 @@ public class UserResource {
     @Produces("application/json")
     @Path("/all")
     public String getCVRs() throws Exception{
-        
-        Gson gsons = new Gson();
-        CvrFacade cvr = new CvrFacade();
-        String s = cvr.getCvr();
-        
-//        String[] parts = s.split("(,\")");
-       
-//        for (int i = 0; i < parts.length; i++) {
-//            JsonObject response = new JsonObject();
-//              try {
-//                  String[] newPart = parts[i].split(("[:]"));
-//                  System.out.println("this is newPart 0: "+newPart[0]);
-//                  System.out.println("this is newPart 1: "+newPart[1]);
-//            response.addProperty(newPart[0].replace("\"", "").replace("{", ""), newPart[1].replace("\"", ""));
-//                  System.out.println("this is response.toString(): "+response.toString());
-//            list.add(response);
-//            i++;
-//            } catch (Exception e) {
-//                  System.out.println("UserResource had an error in converting stream.");
-//            }
-//        }System.out.println("this is my List: "+list.toString());
-          
-        
-        
-//        return gsons.toJson(s);
-        return s;
+        if (cvrList == null){
+        cvrList = call.getAllGroups();
+        Gson gson = new Gson();
+        //System.out.println(GroupList.size());
+        JsonObject response = new JsonObject();
+        for (int i = 1; i < cvrList.size(); i++) {
+            JsonObject main = new JsonObject();
+
+            try {
+                cvr = cvrList.get(i);
+
+                main.addProperty("CVR", cvr.getCvr());
+                main.addProperty("name", cvr.getName());
+                main.addProperty("address", cvr.getAddress());
+                main.addProperty("zip", cvr.getZip());
+                main.addProperty("city", cvr.getCity());
+                list.add(main);
+
+            } catch (Exception e) {
+            }
+        }
+        }
+        //System.out.println(list.toString());
+        return list.toString();
+    
+//        return s;
         
         
         

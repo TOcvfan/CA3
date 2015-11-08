@@ -12,7 +12,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import deploy.DeploymentConfiguration;
+import entity.CVR;
+import facades.CvrFacade;
 import facades.UserFacade;
+import java.util.List;
 import javax.persistence.Persistence;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -36,6 +39,10 @@ public class CreateUser {
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
     JsonParser parser = new JsonParser();
     UserFacade uf = new UserFacade(Persistence.createEntityManagerFactory(DeploymentConfiguration.puName));
+    private static JsonArray list = new JsonArray();
+    private static List<CVR> cvrList;
+    CvrFacade call = new CvrFacade();
+    CVR cvr = new CVR();
     
     
     @Context
@@ -90,5 +97,34 @@ public class CreateUser {
     @PUT
     @Consumes("text/plain")
     public void putText(String content) {
+    }
+    @GET
+    @Produces("application/xml")
+    @Path("/all")
+    public String getCVRs() throws Exception{
+        if (cvrList == null){
+        cvrList = call.getAllGroups();
+        Gson gson = new Gson();
+        //System.out.println(GroupList.size());
+        JsonObject response = new JsonObject();
+        for (int i = 1; i < cvrList.size(); i++) {
+            JsonObject main = new JsonObject();
+
+            try {
+                cvr = cvrList.get(i);
+
+                main.addProperty("CVR", cvr.getCvr());
+                main.addProperty("name", cvr.getName());
+                main.addProperty("address", cvr.getAddress());
+                main.addProperty("zip", cvr.getZip());
+                main.addProperty("city", cvr.getCity());
+                list.add(main);
+
+            } catch (Exception e) {
+            }
+        }
+        }
+        //System.out.println(list.toString());
+        return list.toString();
     }
 }
